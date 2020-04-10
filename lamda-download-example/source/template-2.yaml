@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion : '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  downloadFileToS3:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs12.x
+      Policies: AmazonS3FullAccess
+      Timeout: 10
+      Environment:
+        Variables:
+          SOURCE_URI: https://raw.githubusercontent.com/davelms/medium-articles/master/lamda-download-example/test.txt
+          S3_BUCKET: our-lambda-demo
+          S3_KEY: our-example-file
+      MemorySize: 128
+      Events:
+        downloadFileToS3ScheduledEvent:
+          Type: Schedule
+          Properties:
+            Schedule: rate(1 minute)
