@@ -1,0 +1,17 @@
+---
+- name: Obtain default VPC information
+  ec2_vpc_net_facts:
+    filters:
+      "isDefault": "true"
+  register: default_vpc
+
+- name: Obtain subnets for default VPC
+  ec2_vpc_subnet_facts:
+    filters:
+      vpc-id: "{{ default_vpc['vpcs'][0]['vpc_id'] }}"
+  register: subnet_info
+
+# Use jinja to select a random subnet from the list of subnet ids
+- set_fact:
+    vpc_id: "{{ default_vpc['vpcs'][0]['vpc_id'] }}"
+    random_subnet: "{{ subnet_info.subnets|map(attribute='id')|list|random }}"

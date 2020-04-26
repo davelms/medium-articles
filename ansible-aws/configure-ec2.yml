@@ -1,0 +1,20 @@
+---
+
+# Configure jumpbox
+- hosts: jumpbox
+  become: True
+  gather_facts: True
+  tasks:
+
+    - name: Upgrade all yum packages
+      yum:
+        name: '*'
+        state: latest
+
+    - name: Install packages
+      yum:
+        name: "{{ packages }}"
+      vars:
+        packages:
+          - git
+          - php

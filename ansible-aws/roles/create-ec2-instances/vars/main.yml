@@ -1,0 +1,7 @@
+---
+# vars file for create-ec2-instances
+region_name: 'us-east-1'
+key_name: 'my_keypair'
+ami_id: 'ami-0323c3dd2da7fb37d' # Amazon Linux 2 AMI (HVM), SSD Volume Type, us-east-1
+instance_type: 't2.micro'
+instance_name: 'jumpbox'

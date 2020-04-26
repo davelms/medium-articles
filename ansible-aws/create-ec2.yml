@@ -1,0 +1,9 @@
+---
+# Create jumpbox on an EC2 instance
+- hosts: local
+  gather_facts: False
+  roles:
+    - role: create-ec2-instances
+
+- import_playbook: configure-ec2.yml
+  when: configure is defined

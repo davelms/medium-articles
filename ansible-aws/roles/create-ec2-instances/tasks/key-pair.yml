@@ -1,0 +1,10 @@
+---
+- name: Create a new EC2 key pair
+  ec2_key:
+    name: "{{ key_name }}"
+    region: "{{ region_name }}"
+  register: ec2_key
+
+- name: Save private key
+  copy: content="{{ ec2_key.key.private_key }}" dest="./keys/{{ key_name }}.pem" mode=0600
+  when: ec2_key.changed
