@@ -4,7 +4,7 @@ on:
   push:
     branches: [master]
     paths:
-      - "**/github-actions/**"
+      - "github-actions/**"
 
 jobs:
   build:
