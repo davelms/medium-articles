@@ -3,7 +3,7 @@ Description=demo-application
 After=syslog.target
 
 [Service]
-User=spring
+User=demo-application
 ExecStart=/var/demo-application/demo-application.jar
 SuccessExitStatus=143
 
