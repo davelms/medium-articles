@@ -1,0 +1,11 @@
+[Unit]
+Description=demo-application
+After=syslog.target
+
+[Service]
+User=spring
+ExecStart=/var/demo-application/demo-application.jar
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target

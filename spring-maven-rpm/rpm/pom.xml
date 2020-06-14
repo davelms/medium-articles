@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.example.demo</groupId>
+		<artifactId>demo-application</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+		<relativePath>../pom.xml</relativePath>
+	</parent>
+
+	<artifactId>demo-application-package</artifactId>
+	<packaging>rpm</packaging>
+
+	<name>Demo Application - RPM Package</name>
+
+	<dependencies>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>demo-application-app</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>rpm-maven-plugin</artifactId>
+				<version>2.2.0</version>
+				<extensions>true</extensions>
+				<configuration>
+					<group>${project.groupId}</group>
+					<mappings>
+						<mapping>
+							<directory>/var/demo-application</directory>
+							<filemode>755</filemode>
+							<username>demo-application</username>
+							<groupname>demo-application</groupname>
+							<dependency>
+								<stripVersion>true</stripVersion>
+								<includes>
+									<include>${project.groupId}:demo-application-app</include>
+								</includes>
+							</dependency>
+						</mapping>
+						<mapping>
+							<directory>/etc/systemd/system</directory>
+							<filemode>755</filemode>
+							<username>root</username>
+							<groupname>root</groupname>
+							<sources>
+								<source>
+									<location>src/main/resources/systemd</location>
+								</source>
+							</sources>
+						</mapping>						
+					</mappings>
+					<preinstallScriptlet>
+						<scriptFile>src/main/resources/preinstall.sh</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>
+						<filter>true</filter>
+					</preinstallScriptlet>
+					<postinstallScriptlet>
+						<scriptFile>src/main/resources/postinstall.sh</scriptFile>
+						<fileEncoding>utf-8</fileEncoding>
+						<filter>true</filter>
+					</postinstallScriptlet>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
