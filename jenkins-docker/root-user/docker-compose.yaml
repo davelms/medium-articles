@@ -1,0 +1,25 @@
+version: '3.8'
+
+networks:
+  jenkins-network:
+    name: jenkins
+
+volumes:
+  data:
+    name: jenkins-data
+
+services:
+
+  jenkins:
+    container_name: jenkins-blueocean
+    image: jenkinsci/blueocean
+    restart: unless-stopped
+    user: root
+    networks:
+      - jenkins-network
+    ports:
+      - 8080:8080
+      - 50000:50000
+    volumes:
+      - data:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
