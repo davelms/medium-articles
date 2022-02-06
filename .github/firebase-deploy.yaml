@@ -1,0 +1,30 @@
+name: Deploy Cloud Functions
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths:
+      - 'firebase-functions-actions/functions/**'
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 16.x
+      - uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/firebase-functions-actions/functions/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+      - name: Build Cloud Functions
+        run: npm ci
+        working-directory: firebase-functions-actions/functions
+      - name: Create SA key
+        run: echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > $HOME/gcloud.json
+      - name: Deploy Cloud Functions
+        run: export GOOGLE_APPLICATION_CREDENTIALS=$HOME/gcloud.json && npx firebase-tools deploy --only functions --json         
+        working-directory: firebase-functions-actions
